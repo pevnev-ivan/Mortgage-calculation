@@ -1,3 +1,5 @@
+import updateModel from "./../utils/updateModel.js";
+
 function init(getData) {
     console.log('Init programs');
     const {base, it, gov, zero} = getData().programs
@@ -18,17 +20,13 @@ function init(getData) {
 
     radioBtns.forEach(function (radioBtn) {
         radioBtn.addEventListener('change', function () {
-            this.dispatchEvent(
-                new CustomEvent('updateForm', {
-                    bubbles: true,
-                    detail: {
-                        selectedProgram: parseFloat(this.value),
-                        onUpdate: 'radioProgram',
-                        id: this.id
-                    }
-                }))
-            })
-        })
+			updateModel(this, {
+				onUpdate: 'radioProgram',
+				selectedProgram: parseFloat(this.value),
+				id: this.id,
+			});
+		});
+    })
     }
 
 export default init;
