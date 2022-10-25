@@ -1,5 +1,8 @@
 let data = {
     selectedProgram: 0.1,
+    cost: 12000000,
+    minPrice: 375000,
+    maxPrice: 100000000,
     programs: {
         base: 0.1,
         it: 0.047,
@@ -8,8 +11,16 @@ let data = {
     }
 }
 
+let results = {
+    rate: data.selectedProgram
+}
+
 function getData () {
     return {...data}
+}
+
+function getResults () {
+    return {...results}
 }
 
 function setData (newData) {
@@ -17,8 +28,12 @@ function setData (newData) {
         ...data,
         ...newData
     }
+
+    results = {
+        rate: data.selectedProgram
+    }
     console.log(data);
 }
 
-export {getData, setData}
+export {getData, setData, getResults}
 

@@ -25,6 +25,7 @@ function init(getData) {
 				selectedProgram: parseFloat(this.value),
 				id: this.id,
 			});
+            
 		});
     })
     }
