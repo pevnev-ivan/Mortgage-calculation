@@ -24,6 +24,13 @@ function getResults () {
 }
 
 function setData (newData) {
+    
+    console.log(newData)
+    if (newData.onUpdate === 'inputCost') {
+        if (newData.cost > data.maxPrice) newData.cost = 400000
+        if (newData.cost < data.minPrice) newData.cost = 400000 
+    }
+   
     data = {
         ...data,
         ...newData
@@ -32,6 +39,7 @@ function setData (newData) {
     results = {
         rate: data.selectedProgram
     }
+
     console.log(data);
 }
 
