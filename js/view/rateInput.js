@@ -1,48 +1,50 @@
 import updateModel from "../utils/updateModel.js"
 
 function init (getData) {
-    const input = document.querySelector('#input-cost')
+    const input = document.querySelector('#input-downpayment')
     const data = getData()
 
+    data.rate *=100
     const settings = {
         numeral: true,
-        numeralThousandsGroupStyle: 'thousand',
-        delimiter: ' '
+        prefix: '%',
+        tailPrefix: true,
+        numeralIntegerScale: 2,   
     }
 
+    const min = (data.minPaymentRate * 100)
+    const max = (data.maxPaymentRate * 100)
+
     const cleaveInput = new Cleave(input, settings)
-    cleaveInput.setRawValue(data.cost)
+    cleaveInput.setRawValue(data.rate)
 
     input.addEventListener('input', function () {
-        const value = +cleaveInput.getRawValue()
-
-        if (value < data.minPrice || value > data.maxPrice) {
+        const value = +cleaveInput.getRawValue().split('%')[0]
+        
+        if (value < min  || value > max) {
             input.closest('.param__details').classList.add('param__details--error')
         }
 
-        if (value >= data.minPrice && value <= data.maxPrice) {     
+        if (value >= min && value <= max) {     
             input.closest('.param__details').classList.remove('param__details--error')
         }
-
-        //Update model
-        // updateModel(input, {cost: +cleaveInput.getRawValue(), onUpdate: 'inputCost'})   
     })
 
     input.addEventListener('change', function () {
     
         const value = +cleaveInput.getRawValue()
 
-        if (value < data.minPrice) {
-            cleaveInput.setRawValue(data.minPrice)
+        if (value < min) {
+            cleaveInput.setRawValue(data.minPaymentRate)
         } 
 
-        if (value > data.maxPrice) {
-            cleaveInput.setRawValue(data.maxPrice)
+        if (value > min) {
+            cleaveInput.setRawValue(data.maxPaymentRate)
         }
         
         //Update model
         input.closest('.param__details').classList.remove('param__details--error')
-        updateModel(input, {cost: +cleaveInput.getRawValue(), onUpdate: 'inputCost'})
+        updateModel(input, {rate: +cleaveInput.getRawValue().split('%')[0]/100, onUpdate: 'inputRate'})
     })
 
     return (cleaveInput)

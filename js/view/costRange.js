@@ -1,4 +1,4 @@
-import updateModel from './../utils/updateModel.js'
+import updateModel from '../utils/updateModel.js'
 
 function init (getData) {
 console.log('Cost Range');
@@ -38,7 +38,7 @@ slider.noUiSlider.on('slide', function () {
     updateModel(slider, newData)
 })
 
-
+return (slider)
 }
 
 export default init

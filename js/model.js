@@ -3,6 +3,9 @@ let data = {
     cost: 12000000,
     minPrice: 375000,
     maxPrice: 100000000,
+    rate: 0.15,
+    minPaymentRate: 0.15,
+    maxPaymentRate: 0.9,
     programs: {
         base: 0.1,
         it: 0.047,
@@ -25,7 +28,12 @@ function getResults () {
 
 function setData (newData) {
     
-    console.log(newData)
+    console.log('NEW DATA start', newData)
+
+    if (newData.onUpdate === 'radioProgram') {
+        newData.id === 'zero-value' ? newData.minPaymentRate = 0 : newData.minPaymentRate = 0.15
+    }
+
     if (newData.onUpdate === 'inputCost') {
         if (newData.cost > data.maxPrice) newData.cost = 400000
         if (newData.cost < data.minPrice) newData.cost = 400000 
@@ -40,7 +48,7 @@ function setData (newData) {
         rate: data.selectedProgram
     }
 
-    console.log(data);
+    console.log('DATA AFTER UPD', data)
 }
 
 export {getData, setData, getResults}
