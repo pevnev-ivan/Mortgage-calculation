@@ -1,7 +1,6 @@
 import updateModel from '../utils/updateModel.js'
 
 function init (getData) {
-console.log('Cost Range');
 
 const slider = document.querySelector('#slider-cost')
 const data = getData()
@@ -25,19 +24,16 @@ noUiSlider.create(slider, {
             thousand: ' ',
             suffix: '', 
         })
-
 })
 
 slider.noUiSlider.on('slide', function () {
+    let sliderValue = slider.noUiSlider.get().replace(/ /g, '')
+    sliderValue = parseInt(sliderValue)
 
-    let silderValue = slider.noUiSlider.get().replace(/ /g, '')
-   
-    silderValue = parseInt(silderValue)
-    console.log(silderValue)
-    let newData = {cost: silderValue, onUpdate: 'updateSliderCost'}
+    //Update model
+    let newData = {cost: sliderValue, onUpdate: 'updateSliderCost'}
     updateModel(slider, newData)
 })
-
 return (slider)
 }
 

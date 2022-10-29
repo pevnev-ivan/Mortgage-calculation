@@ -4,24 +4,23 @@ function init (getData) {
     const input = document.querySelector('#input-downpayment')
     const data = getData()
 
-    data.rate *=100
+    const min = data.getDownPayment(data.minPaymentRate)
+    const max = data.getDownPayment(data.maxPaymentRate)
+    const downPayment = data.downPaymentValue
+
     const settings = {
         numeral: true,
-        prefix: '%',
-        tailPrefix: true,
-        numeralIntegerScale: 2,   
+        numeralThousandsGroupStyle: 'thousand',
+        delimiter: ' '
     }
-
-    const min = (data.minPaymentRate * 100)
-    const max = (data.maxPaymentRate * 100)
-
+ 
     const cleaveInput = new Cleave(input, settings)
-    cleaveInput.setRawValue(data.rate)
+    cleaveInput.setRawValue(downPayment)
 
     input.addEventListener('input', function () {
-        const value = +cleaveInput.getRawValue().split('%')[0]
-        
-        if (value < min  || value > max) {
+        const value = +cleaveInput.getRawValue()
+
+        if (value < min || value > max) {
             input.closest('.param__details').classList.add('param__details--error')
         }
 
@@ -31,24 +30,26 @@ function init (getData) {
     })
 
     input.addEventListener('change', function () {
-    
         const value = +cleaveInput.getRawValue()
 
         if (value < min) {
-            cleaveInput.setRawValue(data.minPaymentRate)
+            cleaveInput.setRawValue(data.getDownPayment(data.minPaymentRate))
         } 
 
-        if (value > min) {
-            cleaveInput.setRawValue(data.maxPaymentRate)
+        if (value > max) {
+            cleaveInput.setRawValue(data.getDownPayment(data.maxPaymentRate))
         }
-        
-        //Update model
+
         input.closest('.param__details').classList.remove('param__details--error')
-        updateModel(input, {rate: +cleaveInput.getRawValue().split('%')[0]/100, onUpdate: 'inputRate'})
+
+        //Update model
+        const newDownPayment = +cleaveInput.getRawValue()
+        updateModel(input, {
+            downPaymentValue: newDownPayment, 
+            rate: Math.round(10*newDownPayment/data.cost)/10,
+            onUpdate: 'inputRate'})
     })
-
     return (cleaveInput)
-
 }
 
 export default init

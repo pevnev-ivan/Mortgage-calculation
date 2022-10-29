@@ -3,9 +3,16 @@ let data = {
     cost: 12000000,
     minPrice: 375000,
     maxPrice: 100000000,
+    getDownPayment: function (rate) {
+        return rate*this.cost
+    },
     rate: 0.15,
     minPaymentRate: 0.15,
     maxPaymentRate: 0.9,
+    downPaymentValue: 1800000,
+    duration: 1,
+    minDuration: 1,
+    maxDuration: 30,
     programs: {
         base: 0.1,
         it: 0.047,
