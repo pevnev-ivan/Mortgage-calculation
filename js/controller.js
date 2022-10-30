@@ -9,6 +9,7 @@ import costSlider from './view/costSlider.js'
 import downPaymentInput from './view/downPaymentInput.js'
 import downPaymentSlider from './view/downPaymentSlider.js'
 import durationInput from './view/durationInput.js'
+import durationSlider from "./view/durationSlider.js";
 
 window.onload = function () {
     // Init programs
@@ -22,12 +23,14 @@ window.onload = function () {
     const inputDownPayment = downPaymentInput(getData)
 
     const inputDuration = durationInput(getData)
+    const sliderDuration = durationSlider(getData)
 
     document.addEventListener('updateForm', (e) => {
         model.setData(e.detail)
 
         const data = model.getData()
         const results = model.getResults()
+
         
         updateFormsAndSliders(data)
         updateResultsView(results)
@@ -35,9 +38,13 @@ window.onload = function () {
 
     function updateFormsAndSliders (data) {
 
+        if (data.onUpdate === 'sliderDuration') {
+            inputDuration.setRawValue(data.duration)
+        }
 
-
-
+        if (data.onUpdate === 'durationInput') {
+            sliderDuration.noUiSlider.set(data.duration)
+        }
 
         if (data.onUpdate === 'updateSliderCost' || data.onUpdate === 'inputCost') {
             if (data.downPaymentValue < data.getDownPayment(data.minPaymentRate) ||
@@ -56,6 +63,15 @@ window.onload = function () {
 
         if (data.onUpdate === 'radioProgram') {
             updateMinPaymentRate(data.minPaymentRate)
+
+            sliderDownPayment.noUiSlider.updateOptions({
+                range: {
+                    min: data.minPaymentRate,
+                    max: data.maxPaymentRate
+                }
+            })
+            inputDownPayment.setRawValue(Math.round(data.getDownPayment(data.minPaymentRate)))
+            sliderDownPayment.noUiSlider.set(data.minPaymentRate)
         }
 
         if (data.onUpdate !== 'updateSliderCost') {
