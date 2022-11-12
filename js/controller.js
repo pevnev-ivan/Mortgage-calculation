@@ -24,6 +24,11 @@ window.onload = function () {
 
     const inputDuration = durationInput(getData)
     const sliderDuration = durationSlider(getData)
+    
+    //  Данные для первой отрисовки результатов
+    model.setData({})
+    const results = model.getResults()
+    updateResultsView(results)
 
     document.addEventListener('updateForm', (e) => {
         model.setData(e.detail)

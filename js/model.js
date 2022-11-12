@@ -51,8 +51,20 @@ function setData (newData) {
         ...newData
     }
 
+    const months = data.duration * 12
+    const monthRate = data.rate / 12
+    const overallRate = (1 + monthRate) ** months
+    const pureDebtValue = data.cost - data.cost*data.rate
+    const monthlyPayment = Math.floor((pureDebtValue * monthRate * overallRate) / (overallRate - 1))
+    
+    const overPayment = monthlyPayment * months - pureDebtValue
+    console.log(months, monthRate, overPayment, pureDebtValue, monthlyPayment)
+    console.log(data.downPaymentValue)
     results = {
-        rate: data.selectedProgram
+        rate: data.selectedProgram,
+        monthlyPayment,
+        pureDebtValue,
+        overPayment
     }
 
     console.log('DATA AFTER UPD', data)
