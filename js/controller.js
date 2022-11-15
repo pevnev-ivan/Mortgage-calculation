@@ -87,4 +87,71 @@ window.onload = function () {
             inputCost.setRawValue(data.cost)
         }
     }
+
+    //Order Form
+
+    const openFormButton = document.querySelector('#openFormBtn')
+    const orderForm = document.querySelector('#orderForm')
+    const submitFormBtn = document.querySelector('#submitFormBtn')
+    const success = document.querySelector('#success')
+    const error = document.querySelector('#error')
+
+    openFormButton.addEventListener('click', function () {
+        orderForm.classList.remove('none')
+        openFormButton.classList.add('none')
+    })
+
+    orderForm.addEventListener('submit', function (e) {
+        e.preventDefault()
+
+        const formData = new FormData(orderForm)
+
+        submitFormBtn.setAttribute('disabled', true)
+        submitFormBtn.innerHTML = 'Заявка отправляется...'
+        
+        orderForm.querySelectorAll('input').forEach(function (input) {
+            input.setAttribute('disabled', true)
+        })
+        
+        fetchData()
+        
+        async function fetchData() {
+            const data = model.getData()
+            const results = model.getResults()
+
+            let url = document.location.href
+            url = checkURL(url)
+
+            function checkURL (url) {
+                //http://127.0.0.1:5500/index.html
+                let newURL = url
+                let urlArrayDot = url.split('.')
+    
+                if (urlArrayDot[urlArrayDot.length - 1] === 'html') {
+                    urlArrayDot.pop()
+                    let urlArraySlash = urlArrayDot.join('.').split('/')
+                    urlArraySlash.pop()
+
+                    newURL = urlArraySlash.join('/')
+                }
+                return newURL
+            }
+
+            const response = await fetch(url + 'mail.php', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    form: {
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone'),
+                    }
+                })
+            })
+
+            const result = await response.text()
+        }
+    })
 }
